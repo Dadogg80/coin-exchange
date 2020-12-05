@@ -20,7 +20,7 @@ export default class Coin extends Component {
      handleClick = (event) => {
         // Prevent the default action of submitting the form
         event.preventDefault();
-        this.props.handleRefresh(this.props.ticker);
+        this.props.handleRefresh(this.props.tickerId);
       }
       
       render() {

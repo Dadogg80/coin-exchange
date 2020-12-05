@@ -13,35 +13,35 @@ const Div = styled.div`
 `;
 
 const COIN_COUNT = 10;
+const formatPrice = price => parseFloat(Number(price).toFixed(3))
 
 class App extends React.Component {
   state = {
       balance: 10000,
       showBalance: true,
-      coinData: []
+      coinData: [ ]
     }
     
-
-  componentDidMount = () => {
-    axios.get('https://api.coinpaprika.com/v1/coins')
-        .then( response => {
-          debugger;
-            let coinData = response.data.slice(0, COIN_COUNT).map(function(coin) {
-              return {
-                key: coin.id,
-                name: coin.name,
-                ticker: coin.symbol,
-                balance: 0,
-                price: 0,
-              };
-            });
-            console.log('setting the state');
-            this.setState({ coinData });
-            console.log('DONE setting the state');
-        });
-      console.log('componentDidMount is DONE');
-      debugger;
+  componentDidMount = async () => {
+    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
+    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+    const tickerUrl = 'https://api.coinpaprika.com/v1/tickers/';
+    const promises = coinIds.map(id => axios.get(tickerUrl + id)); 
+    const coinData = await Promise.all(promises);
+    const coinPriceData = coinData.map(function(response) {
+      const coin = response.data;
+      return {
+        key: coin.id,
+        name: coin.name,
+        ticker: coin.symbol,
+        balance: 0,
+        price: formatPrice(coin.quotes['USD'].price),
+      };
+    });
+    /* Retrieve the prices from axios */
+    this.setState({ coinData: coinPriceData });
   }
+
 
   handleBalanceVisibilityChange = () => {
     this.setState( function(oldState) {
@@ -52,13 +52,14 @@ class App extends React.Component {
     });
   }
 
-
-  handleRefresh = (valueChangeTicker) => {
+  handleRefresh = async (valueChangeId) => {
+    const tickerUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const response = await axios.get(tickerUrl);
+    const newPrice = formatPrice(response.data.quotes.USD.price);
     const newCoinData = this.state.coinData.map( function( values ) {
       let newValues = { ...values };
-      if ( valueChangeTicker === values.ticker ) {
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        newValues.price *= randomPercentage;
+      if ( valueChangeId === values.key ) {
+        newValues.price = newPrice;
       }
       return newValues;
     });
