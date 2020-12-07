@@ -6,13 +6,14 @@ import PropTypes from 'prop-types';
 const Td = styled.td`
     color: #fff;
     border: 1px solid #cccccc;
-    width: 25vh;
+    width: 30vh;
 `;
+
 const Button = styled.button`
     border-radius: 9px;
-    padding: 7px;
+    margin: 5px;
     color: #fff;
-    background-color: blue;
+    background-color: #009900;
 `;
 
 export default function Coin(props) {
@@ -25,7 +26,7 @@ export default function Coin(props) {
   
     return (
          <tr>
-            <Td> {props.name} </Td>
+            <Td id="name-row"> {props.name} </Td>
             <Td> {props.ticker} </Td>
             <Td> ${props.price} </Td>
             {props.showBalance ? <Td> ${props.balance} </Td> : null}

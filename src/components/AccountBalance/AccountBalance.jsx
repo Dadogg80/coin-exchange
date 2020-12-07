@@ -4,33 +4,58 @@ import styled from 'styled-components';
 
 const Section = styled.section`
     font-size: 2rem;
-    text-align: left;
-    padding: 1.5rem 0 1.5rem 5rem;
-    font-family: sans-serif;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 3rem;
+    
     color: #FFFF;
+`;
+const Balance = styled.div`
+    min-width: 250;
+    margin: 0.5rem 0 0 2.5rem;
+    font-size: 1.5em;
+    vertical-align: middle;
+    text-align: center;
 `;
 
 const Button = styled.button`
-    border-radius: 9px;
-    padding: 7px;
-    color: #fff;
-    background-color: blue;
+    margin: 0 8px;
+    
 `;
+
+const BalanceToggleButton = styled(Button)`
+    width: 150px;
+`;
+
+var formatter = Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+});
+
+
 
 export default function AccountBalance(props) {
 
     const buttonText = props.showBalance ? 'Hide Balance' : 'Show Balance';
-    let content = null;
-    if ( props.showBalance ) {
-        content = <>Balance: ${props.amount}</>;
+    let content = '\u00A0';
+    if (props.showBalance) {
+        content = <>{ formatter.format(props.amount) } </>
     }
+    const buttonClass = 'btn ' + (props.showBalance ? 'btn-warning' : 'btn-info');
     return (
-        <Section>
-            <h4>
-            {content}
-            </h4>
-            <Button onClick={props.handleBalanceVisibilityChange}>{buttonText}</Button>             
-        </Section>
+        <>
+            <Balance>{content}</Balance>
+            <Section>
+                <BalanceToggleButton 
+                    onClick={props.handleBalanceVisibilityChange}
+                    className= {buttonClass}>
+                    {buttonText}
+                </BalanceToggleButton>
+                <Button className="btn btn-success">
+                    <i className="fas fa-helicopter"></i>    
+                </Button>
+            </Section>
+        </>
     );
 }
 

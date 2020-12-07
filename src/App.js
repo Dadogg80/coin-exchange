@@ -5,6 +5,10 @@ import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootswatch/dist/flatly/bootstrap.min.css';
+
+import '@fortawesome/fontawesome-free/js/all';
 
 const Div = styled.div`
   text-align: center;
@@ -17,7 +21,7 @@ const formatPrice = price => parseFloat(Number(price).toFixed(3))
 
 function App(props) {
   const [balance, setBalance] = useState(10000);
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
 
   const componentDidMount = async () => {

@@ -6,6 +6,7 @@ const Table = styled.table`
     margin: 50px auto 50px auto;
     display: inline-block;
     font-size: 1.4rem;
+    color: #F7931A;
 `;
 
 export default function CoinList(props) {
