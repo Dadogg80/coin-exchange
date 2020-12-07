@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -17,23 +17,23 @@ const Button = styled.button`
     background-color: blue;
 `;
 
-export default class AccountBalance extends Component {
-    render() {
-        const buttonText = this.props.showBalance ? 'Hide Balance' : 'Show Balance';
-        let content = null;
-        if ( this.props.showBalance ) {
-            content = <>Balance: ${this.props.amount}</>;
-        }
-        return (
-           <Section>
-               <h4>
-                {content}
-               </h4>
-               <Button onClick={this.props.handleBalanceVisibilityChange}>{buttonText}</Button>             
-           </Section>
-        );
+export default function AccountBalance(props) {
+
+    const buttonText = props.showBalance ? 'Hide Balance' : 'Show Balance';
+    let content = null;
+    if ( props.showBalance ) {
+        content = <>Balance: ${props.amount}</>;
     }
+    return (
+        <Section>
+            <h4>
+            {content}
+            </h4>
+            <Button onClick={props.handleBalanceVisibilityChange}>{buttonText}</Button>             
+        </Section>
+    );
 }
+
 
 
 
