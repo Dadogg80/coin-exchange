@@ -6,35 +6,61 @@ import PropTypes from 'prop-types';
 const Td = styled.td`
     color: #fff;
     border: 1px solid #cccccc;
-    width: 30vh;
+    width: 14vw;
+`;
+
+const TdControls = styled(Td)`
+    width: 32vw;
+`;
+
+const TdName = styled(Td)`
+    width: 24vw;
 `;
 
 const Button = styled.button`
-    border-radius: 9px;
-    margin: 5px;
-    color: #fff;
-    background-color: #009900;
+    font-size: 11px;
+    width: 64px;
+    margin: 3px 5px 0;
 `;
 
 export default function Coin(props) {
 
-    const handleClick = (event) => {
+    const handleRefresh = (event) => {
       // Prevent the default action of submitting the form
       event.preventDefault();
       props.handleRefresh(props.tickerId);
     }
+    const handleBuy = (event) => {
+      // Prevent the default action of submitting the form
+      event.preventDefault();
+      props.handleTransaction(true, props.tickerId);
+    }
+
+    const handleSell = (event) => {
+      // Prevent the default action of submitting the form
+      event.preventDefault();
+      props.handleTransaction(false, props.tickerId);
+    }
   
     return (
          <tr>
-            <Td id="name-row"> {props.name} </Td>
+            <TdName id="name-row"> {props.name} </TdName>
             <Td> {props.ticker} </Td>
-            <Td> ${props.price} </Td>
-            {props.showBalance ? <Td> ${props.balance} </Td> : null}
-            <Td>
-              <form action="#" method="POST">
-                <Button onClick={handleClick}>refresh</Button>
+            <Td> $ {props.price} </Td>
+            <Td> $ {props.showBalance ? props.balance : '-'} </Td>
+            <TdControls>
+              <form action="#" method="POST" >
+                <Button className="btn btn-info" onClick = {handleRefresh} >
+                  Refresh
+                </Button>
+                <Button className="btn btn-success" onClick = {handleBuy} >
+                  Buy
+                </Button>
+                <Button className="btn btn-danger" onClick = {handleSell} >
+                  Sell
+                </Button>
               </form>
-            </Td>
+            </TdControls>
           </tr>
        );
 

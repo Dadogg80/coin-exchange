@@ -25,22 +25,22 @@ function App(props) {
   const [coinData, setCoinData] = useState([]);
 
   const componentDidMount = async () => {
-    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
-    const tickerUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    const promises = coinIds.map(id => axios.get(tickerUrl + id)); 
-    const coinData = await Promise.all(promises);
-    const coinPriceData = coinData.map(function(response) {
-      const coin = response.data;
-      return {
-        key: coin.id,
-        name: coin.name,
-        ticker: coin.symbol,
-        balance: 0,
-        price: formatPrice(coin.quotes['USD'].price),
-      };
-    });
-    setCoinData(coinPriceData);
+  const response = await axios.get('https://api.coinpaprika.com/v1/coins');
+  const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+  const tickerUrl = 'https://api.coinpaprika.com/v1/tickers/';
+  const promises = coinIds.map(id => axios.get(tickerUrl + id)); 
+  const coinData = await Promise.all(promises);
+  const coinPriceData = coinData.map(function(response) {
+  const coin = response.data;
+    return {
+      key: coin.id,
+      name: coin.name,
+      ticker: coin.symbol,
+      balance: 0,
+      price: formatPrice(coin.quotes['USD'].price),
+    };
+  });
+  setCoinData(coinPriceData);
   }
 
   useEffect(function() {
@@ -51,8 +51,22 @@ function App(props) {
   });
 
 
-  
+  const handleBrrr = () => {
+    setBalance( oldBalance => oldBalance + 1200 );
+  }
 
+  const handleTransaction = (isBuy, valueChangeId) => {
+    var balanceChange = isBuy ? 1 : -1;
+    const newCoinData = coinData.map( function(values) {
+      let newValues = {...values};
+      if (valueChangeId === values.key) {
+        newValues.balance += balanceChange;
+        setBalance( oldBalance => oldBalance - balanceChange * newValues.price );
+      }
+      return newValues;
+    });
+    setCoinData(newCoinData);
+  }
 
   const handleBalanceVisibilityChange = () => {
     setShowBalance(oldValue => !oldValue);
@@ -78,11 +92,13 @@ function App(props) {
         < AccountBalance 
             amount = { balance } 
             showBalance = { showBalance } 
+            handleBrrr = {handleBrrr}
             handleBalanceVisibilityChange = {handleBalanceVisibilityChange }
         />
         < CoinList 
             coinData = { coinData } 
             showBalance = { showBalance }
+            handleTransaction = { handleTransaction }
             handleRefresh = { handleRefresh } 
         />
       </Div>

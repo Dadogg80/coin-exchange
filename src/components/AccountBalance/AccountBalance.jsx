@@ -7,15 +7,15 @@ const Section = styled.section`
     text-align: center;
     margin-bottom: 2rem;
     line-height: 3rem;
-    
     color: #FFFF;
 `;
+
 const Balance = styled.div`
     min-width: 250;
     margin: 0.5rem 0 0 2.5rem;
     font-size: 1.5em;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 `;
 
 const Button = styled.button`
@@ -51,7 +51,8 @@ export default function AccountBalance(props) {
                     className= {buttonClass}>
                     {buttonText}
                 </BalanceToggleButton>
-                <Button className="btn btn-success">
+                <Button className="btn btn-success"
+                    onClick = {props.handleBrrr}>
                     <i className="fas fa-helicopter"></i>    
                 </Button>
             </Section>
